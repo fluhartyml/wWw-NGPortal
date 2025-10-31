@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		C091C36E2EB53ABE00B5147A /* Vapor in Frameworks */ = {isa = PBXBuildFile; productRef = C091C36D2EB53ABE00B5147A /* Vapor */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		C091C33B2EB51B2300B5147A /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -42,6 +46,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				C091C36E2EB53ABE00B5147A /* Vapor in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -100,6 +105,7 @@
 			);
 			name = "wWw NGPortal";
 			packageProductDependencies = (
+				C091C36D2EB53ABE00B5147A /* Vapor */,
 			);
 			productName = "wWw NGPortal";
 			productReference = C091C32D2EB51B2200B5147A /* wWw NGPortal.app */;
@@ -177,6 +183,9 @@
 			);
 			mainGroup = C091C3242EB51B2200B5147A;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				C091C36C2EB53ABE00B5147A /* XCRemoteSwiftPackageReference "vapor" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = C091C32E2EB51B2200B5147A /* Products */;
 			projectDirPath = "";
@@ -555,6 +564,25 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		C091C36C2EB53ABE00B5147A /* XCRemoteSwiftPackageReference "vapor" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/vapor/vapor";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 4.117.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		C091C36D2EB53ABE00B5147A /* Vapor */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = C091C36C2EB53ABE00B5147A /* XCRemoteSwiftPackageReference "vapor" */;
+			productName = Vapor;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = C091C3252EB51B2200B5147A /* Project object */;
 }

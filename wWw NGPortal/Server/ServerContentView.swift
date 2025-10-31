@@ -10,7 +10,7 @@ import SwiftUI
 
 struct ServerContentView: View {
     @Environment(AppState.self) private var appState
-    @State private var isServerRunning = false
+    @State private var vaporServer = VaporServer()
     @State private var serverPort = "8080"
     @State private var currentIP = "Not detected"
     
@@ -37,8 +37,8 @@ struct ServerContentView: View {
                             Text("Status:")
                                 .fontWeight(.medium)
                             Spacer()
-                            Text(isServerRunning ? "Running" : "Stopped")
-                                .foregroundStyle(isServerRunning ? .green : .secondary)
+                            Text(vaporServer.isRunning ? "Running" : "Stopped")
+                                .foregroundStyle(vaporServer.isRunning ? .green : .secondary)
                         }
                         
                         HStack {
@@ -57,7 +57,7 @@ struct ServerContentView: View {
                                 .foregroundStyle(.secondary)
                         }
                         
-                        if isServerRunning {
+                        if vaporServer.isRunning {
                             HStack {
                                 Text("URL:")
                                     .fontWeight(.medium)
@@ -78,7 +78,7 @@ struct ServerContentView: View {
                             TextField("Port", text: $serverPort)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
-                                .disabled(isServerRunning)
+                                .disabled(vaporServer.isRunning)
                             
                             Text("Server Port")
                                 .foregroundStyle(.secondary)
@@ -88,8 +88,8 @@ struct ServerContentView: View {
                         
                         Button(action: toggleServer) {
                             HStack {
-                                Image(systemName: isServerRunning ? "stop.fill" : "play.fill")
-                                Text(isServerRunning ? "Stop Server" : "Start Server")
+                                Image(systemName: vaporServer.isRunning ? "stop.fill" : "play.fill")
+                                Text(vaporServer.isRunning ? "Stop Server" : "Start Server")
                             }
                             .frame(maxWidth: .infinity)
                         }
@@ -101,23 +101,37 @@ struct ServerContentView: View {
                 
                 Spacer()
             }
-            .padding(24)
+            .padding(.horizontal, 24)
+            .padding(.vertical, 16)
         }
     }
     
     @MainActor
     private func toggleServer() {
-        isServerRunning.toggle()
-        
-        if isServerRunning {
-            appState.addDebugMessage("Starting web server on port \(serverPort)", type: .info)
-            detectCurrentIP()
-            // TODO: Actually start Vapor server
-            appState.addDebugMessage("Web server started successfully", type: .success)
-        } else {
-            appState.addDebugMessage("Stopping web server", type: .info)
-            // TODO: Actually stop Vapor server
-            appState.addDebugMessage("Web server stopped", type: .info)
+        Task {
+            if vaporServer.isRunning {
+                // Stop server
+                appState.addDebugMessage("Stopping web server", type: .info)
+                await vaporServer.stop()
+                appState.addDebugMessage("Web server stopped", type: .info)
+            } else {
+                // Start server
+                guard let port = Int(serverPort) else {
+                    appState.addDebugMessage("Invalid port number", type: .error)
+                    return
+                }
+                
+                appState.addDebugMessage("Starting web server on port \(port)", type: .info)
+                detectCurrentIP()
+                
+                do {
+                    try await vaporServer.start(on: port)
+                    appState.addDebugMessage("Web server started successfully", type: .success)
+                    appState.addDebugMessage("Visit http://\(currentIP):\(port) in your browser", type: .info)
+                } catch {
+                    appState.addDebugMessage("Failed to start server: \(error.localizedDescription)", type: .error)
+                }
+            }
         }
     }
     
