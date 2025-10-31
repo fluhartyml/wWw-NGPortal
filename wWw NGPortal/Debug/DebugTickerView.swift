@@ -2,14 +2,16 @@
 //  DebugTickerView.swift
 //  wWw NGPortal
 //
-//  Debug message ticker panel display
-//  2025-10-31 13:11 CDT
+//  Debug message ticker panel display with auto-scroll animation
+//  2025-10-31 17:54 CDT
 //
 
 import SwiftUI
 
 struct DebugTickerView: View {
     @Environment(AppState.self) private var appState
+    @State private var scrollOffset: CGFloat = 0
+    @State private var contentWidth: CGFloat = 0
     
     var body: some View {
         VStack(spacing: 0) {
@@ -21,14 +23,32 @@ struct DebugTickerView: View {
                     .foregroundStyle(.orange)
                     .imageScale(.medium)
                 
-                // Messages scroll view
-                ScrollView(.horizontal, showsIndicators: true) {
-                    HStack(spacing: 16) {
-                        ForEach(appState.debugMessages.suffix(20)) { message in
-                            DebugMessageView(message: message)
+                // Auto-scrolling messages
+                GeometryReader { geometry in
+                    ScrollView(.horizontal, showsIndicators: false) {
+                        HStack(spacing: 16) {
+                            ForEach(appState.debugMessages.suffix(20)) { message in
+                                DebugMessageView(message: message)
+                            }
                         }
+                        .padding(.horizontal, 8)
+                        .background(
+                            GeometryReader { contentGeometry in
+                                Color.clear
+                                    .onAppear {
+                                        contentWidth = contentGeometry.size.width
+                                    }
+                                    .onChange(of: appState.debugMessages.count) {
+                                        contentWidth = contentGeometry.size.width
+                                    }
+                            }
+                        )
+                        .offset(x: scrollOffset)
                     }
-                    .padding(.horizontal, 8)
+                    .scrollDisabled(true)
+                    .onAppear {
+                        startScrolling(viewWidth: geometry.size.width)
+                    }
                 }
                 
                 // Clear button
@@ -45,9 +65,18 @@ struct DebugTickerView: View {
         }
     }
     
+    private func startScrolling(viewWidth: CGFloat) {
+        guard contentWidth > 0 else { return }
+        
+        withAnimation(.linear(duration: Double(contentWidth / 50)).repeatForever(autoreverses: false)) {
+            scrollOffset = -contentWidth - viewWidth
+        }
+    }
+    
     @MainActor
     private func clearMessages() {
         appState.clearDebugMessages()
+        scrollOffset = 0
     }
 }
 

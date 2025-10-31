@@ -2,8 +2,8 @@
 //  DDNSContentView.swift
 //  wWw NGPortal
 //
-//  DDNS configuration and status display
-//  2025-10-31 13:05 CDT
+//  DuckDNS configuration and status display
+//  2025-10-31 18:19 CDT
 //
 
 import SwiftUI
@@ -11,7 +11,6 @@ import SwiftUI
 struct DDNSContentView: View {
     @Environment(AppState.self) private var appState
     @State private var isEnabled = false
-    @State private var provider = DDNSProvider.duckDNS
     @State private var domain = ""
     @State private var token = ""
     @State private var updateInterval = 5
@@ -74,30 +73,19 @@ struct DDNSContentView: View {
                 }
                 
                 // DDNS Configuration
-                GroupBox("Configuration") {
+                GroupBox("DuckDNS Configuration") {
                     VStack(alignment: .leading, spacing: 16) {
-                        // Provider Selection
-                        HStack {
-                            Text("Provider:")
-                                .frame(width: 100, alignment: .leading)
-                            
-                            Picker("", selection: $provider) {
-                                ForEach(DDNSProvider.allCases, id: \.self) { provider in
-                                    Text(provider.rawValue).tag(provider)
-                                }
-                            }
-                            .labelsHidden()
-                            .disabled(isEnabled)
-                        }
-                        
                         // Domain
                         HStack {
-                            Text("Domain:")
+                            Text("Subdomain:")
                                 .frame(width: 100, alignment: .leading)
                             
-                            TextField("example.duckdns.org", text: $domain)
+                            TextField("myhouse", text: $domain)
                                 .textFieldStyle(.roundedBorder)
                                 .disabled(isEnabled)
+                            
+                            Text(".duckdns.org")
+                                .foregroundStyle(.secondary)
                         }
                         
                         // Token/Password
@@ -181,13 +169,6 @@ struct DDNSContentView: View {
         lastStatus = "Success"
         appState.addDebugMessage("DDNS update successful", type: .success)
     }
-}
-
-enum DDNSProvider: String, CaseIterable {
-    case duckDNS = "DuckDNS"
-    case noIP = "No-IP"
-    case dynu = "Dynu"
-    case cloudflare = "Cloudflare"
 }
 
 #Preview {
