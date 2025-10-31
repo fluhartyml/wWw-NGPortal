@@ -3,7 +3,7 @@
 //  wWw NGPortal
 //
 //  Manages application-wide state for feature selection and debug mode
-//  2025-10-31 12:35 CDT
+//  2025-10-31 14:58 CDT
 //
 
 import Foundation
@@ -13,7 +13,7 @@ import Observation
 @MainActor
 class AppState {
     var selectedFeature: AppFeature = .webServer
-    var isDebugEnabled: Bool = false
+    var isDebugEnabled: Bool = true  // Start with debug ticker open
     var debugMessages: [DebugMessage] = []
     
     func addDebugMessage(_ message: String, type: DebugMessageType = .info) {

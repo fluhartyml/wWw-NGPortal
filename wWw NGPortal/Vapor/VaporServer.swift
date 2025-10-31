@@ -3,7 +3,7 @@
 //  wWw NGPortal
 //
 //  Vapor web server implementation
-//  2025-10-31 14:35 CDT
+//  2025-10-31 17:43 CDT
 //
 
 import Foundation
@@ -22,10 +22,12 @@ class VaporServer {
         self.port = port
         
         // Create Vapor application
-        var env = try Environment.detect()
-        env.arguments = ["serve", "--port", "\(port)"]
-        
+        let env = try Environment.detect()
         let app = try await Application.make(env)
+        
+        // Configure server port
+        app.http.server.configuration.port = port
+        
         self.app = app
         
         // Configure routes
@@ -55,8 +57,8 @@ class VaporServer {
     
     private func configureRoutes(_ app: Application) {
         // Root route
-        app.get { req async in
-            return """
+        app.get { req async -> Response in
+            let html = """
             <!DOCTYPE html>
             <html>
             <head>
@@ -90,6 +92,12 @@ class VaporServer {
             </body>
             </html>
             """
+            
+            return Response(
+                status: .ok,
+                headers: ["Content-Type": "text/html; charset=utf-8"],
+                body: .init(string: html)
+            )
         }
         
         // API Status route
