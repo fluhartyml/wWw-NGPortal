@@ -2,7 +2,8 @@
 //  wWw_NGPortalApp.swift
 //  wWw NGPortal
 //
-//  Created by Michael Fluharty on 10/31/25.
+//  App entry point with window configuration
+//  2025-10-31 13:19 CDT
 //
 
 import SwiftUI
@@ -13,5 +14,6 @@ struct wWw_NGPortalApp: App {
         WindowGroup {
             ContentView()
         }
+        .defaultSize(width: 1200, height: 800)
     }
 }
