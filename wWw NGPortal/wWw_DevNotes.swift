@@ -33,18 +33,16 @@ Rules & Guidance for ChatGPT/Claude (Persistent Memory)
 - If a note implies code changes, treat that as a separate, explicit task; do not change code unless requested.
 - Assistant recap formatting: Keep recaps for instructions and steps within a single paragraph.
 - CRITICAL WORKFLOW RULES:
-- AI ASSISTANTS DO ALL HEAVY LIFTING: AI does 100% of coding, file creation, problem-solving, and technical work.
-- USER DOES MINIMAL ACTIONS ONLY: User only performs actions that AI assistants are physically prohibited from doing in Xcode.
+- AI ASSISTANTS DO ALL HEAVY LIFTING: Claude Code CLI does 100% of coding, file editing, problem-solving, and technical work via terminal/CLI commands. NEW files go to Drop folder only (to prevent Xcode duplicate file creation); existing files are edited in-place.
+- USER DOES MINIMAL ACTIONS ONLY: User only performs actions that AI assistants are physically prohibited from doing in Xcode. ****Human does not CODE****
 - STEP-BY-STEP SCREENSHOT METHODOLOGY:
   * AI gives THREE specific, minimal instruction (e.g., "Click the + button", "Select this menu item")
   * User performs ONLY that single action
-  * User takes screenshot showing the result
-  * User uploads screenshot to AI
+  * User takes screenshot showing the result and tells CLI Claude to check Screenshots folder
   * AI MUST PAUSE and wait for screenshot before giving next instruction
   * This creates a calm, methodical, stress-free workflow
-- USER PREFERS XCODE-ONLY WORKFLOW: No terminal commands ever.
 - FOCUS ON BUGS/ERRORS ONLY: Enhancements and new features go in notes only, not implemented unless fixing a bug.
-- AFTER SUCCESSFUL BUILD: Claude must remind user to push to GitHub via Xcode Source Control.
+- AFTER SUCCESSFUL BUILD: When user provides screenshot of successful build, Claude suggests a GitHub commit message formatted as: YYYY MMM DD [description of what was successful about the build] (MLF) HHMM. User commits and pushes via Xcode Source Control GUI, then celebrates with Claude.
 
 - Commit message style: short, imperative, informative (e.g., "Fix entry save bug").
 - When asked to "summarize developer notes", summarize ONLY content from this file; do not invent or reference external logs.
@@ -67,9 +65,33 @@ GitHub & Repository Policy
 ====================================================
 Project Status & Chat Summary
 ====================================================
+- [2025 NOV 01 1200] (Claude) COMPLETED - Developer notes updated for Claude Code CLI workflow:
+  - Clarified AI does all coding/file editing via terminal/CLI commands; NEW files go to Drop folder only (prevents Xcode duplicates)
+  - Added explicit policy: ****Human does not CODE****
+  - Updated screenshot methodology: User takes screenshot and tells CLI Claude to check Screenshots folder
+  - Removed outdated "no terminal commands" policy (moot - CLI Claude runs in terminal alongside Xcode)
+  - Git operations remain in Xcode Source Control GUI for celebrating successful builds with Claude
+  - New commit message format for successful builds: YYYY MMM DD [description] (MLF) HHMM
+  - Updated GitHub policy: "Git operations via Xcode Source Control GUI only; CLI Claude handles all other terminal commands"
+- [2025 NOV 01 1012] (Claude) COMPLETED - Proper Vapor server startup with enhanced debug logging:
+  - Replaced app.execute() with app.startup() + app.running?.onStop.get() pattern
+  - Server now actually starts listening before setting isRunning = true
+  - Added AppState reference to VaporServer for comprehensive logging
+  - Debug ticker now shows: Initializing, Configured server, Routes configured, Starting HTTP server, HTTP server listening, Server accessible at URL
+  - Error handling: All failures logged to debug ticker with .error type
+  - Stop logging: Shows "Stopping HTTP server" and "HTTP server stopped"
+  - User's goal achieved: Debug ticker displays all pertinent information for smooth operation
+- [2025 NOV 01 1004] (Claude) Debugging server not actually listening:
+  - Bug: Console shows "Server started" but nc test shows "Connection refused"
+  - Server is not actually listening on port 8080 despite success message
+  - app.execute() likely failing silently in background Task
+- [2025 NOV 01 0943] (Claude) Fixing server network binding issue:
+  - Bug: Server only listening on 127.0.0.1 (localhost), not accessible from LAN
+  - COMPLETED: Added hostname = "0.0.0.0" configuration
+  - Console now shows: "Server started on http://0.0.0.0:8080"
 - [2025 NOV 01 0922] (Claude) Adding clickable URL link to server status:
   - Task: Make URL in ServerContentView clickable to open in default browser
-  - Will use Link view or Button with NSWorkspace.shared.open()
+  - COMPLETED: Used SwiftUI Link view, URL now clickable and opens Safari
 - [2025 NOV 01 0910] (Claude) Morning development session - Swift 6 upgrade and bug fixes:
   - Upgraded project from Swift 5.0 to Swift 6.0 in project.pbxproj (all targets: main, tests, UI tests)
   - Fixed server status UI sync bug: Added @Observable macro to VaporServer class
@@ -108,7 +130,7 @@ Project Status & Chat Summary
   - No third-party CI/CD or automation; no release pipelines.
   - Do not add code or dependencies solely to support GitHub features.
   - README stays minimal (no shields). Repository metadata optional.
-  - Xcode-only workflow: use Source Control UI; no terminal.
+  - Git operations via Xcode Source Control GUI only; CLI Claude handles all other terminal commands.
   - Any future automation requires explicit approval in Developer Notes.
 - [2025-09-26 19:10] (MF) GitHub setup parameters for this project (sync-only, Xcode-only workflow):
   - Visibility: public GitHub repository.
@@ -156,7 +178,7 @@ Developer Notes Log
   - No third-party CI/CD or automation; no release pipelines.
   - Do not add code or dependencies solely to support GitHub features.
   - README stays minimal (no shields). Repository metadata optional.
-  - Xcode-only workflow: use Source Control UI; no terminal.
+  - Git operations via Xcode Source Control GUI only; CLI Claude handles all other terminal commands.
   - Any future automation requires explicit approval in Developer Notes.
 - [2025-09-26 19:10] (MF) GitHub setup parameters for this project (sync-only, Xcode-only workflow):
   - Visibility: Private GitHub repository.

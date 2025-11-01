@@ -33,15 +33,29 @@
 		C091C3442EB51B2300B5147A /* wWw NGPortalUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = "wWw NGPortalUITests.xctest"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		C091C32F2EB51B2200B5147A /* wWw NGPortal */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = "wWw NGPortal";
-			sourceTree = "<group>";
+/* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
+		C091C4612EB6942300B5147A /* Exceptions for "Screenshots" folder in "wWw NGPortal" target */ = {
+			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
+			membershipExceptions = (
+				"Drop/2025-NOV-01-Session-Summary-CLI-Workflow-Update.md",
+				"Drop/2025-OCT-31-ChatSummary.txt",
+			);
+			target = C091C32C2EB51B2200B5147A /* wWw NGPortal */;
 		};
+/* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
+
+/* Begin PBXFileSystemSynchronizedRootGroup section */
 		C091C3972EB5A57000B5147A /* Screenshots */ = {
 			isa = PBXFileSystemSynchronizedRootGroup;
+			exceptions = (
+				C091C4612EB6942300B5147A /* Exceptions for "Screenshots" folder in "wWw NGPortal" target */,
+			);
 			path = Screenshots;
+			sourceTree = "<group>";
+		};
+		C091C44A2EB693D200B5147A /* wWw NGPortal */ = {
+			isa = PBXFileSystemSynchronizedRootGroup;
+			path = "wWw NGPortal";
 			sourceTree = "<group>";
 		};
 /* End PBXFileSystemSynchronizedRootGroup section */
@@ -75,8 +89,8 @@
 		C091C3242EB51B2200B5147A = {
 			isa = PBXGroup;
 			children = (
+				C091C44A2EB693D200B5147A /* wWw NGPortal */,
 				C091C3972EB5A57000B5147A /* Screenshots */,
-				C091C32F2EB51B2200B5147A /* wWw NGPortal */,
 				C091C32E2EB51B2200B5147A /* Products */,
 			);
 			sourceTree = "<group>";
@@ -107,7 +121,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
-				C091C32F2EB51B2200B5147A /* wWw NGPortal */,
+				C091C44A2EB693D200B5147A /* wWw NGPortal */,
 			);
 			name = "wWw NGPortal";
 			packageProductDependencies = (

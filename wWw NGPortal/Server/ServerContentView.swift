@@ -13,7 +13,7 @@ struct ServerContentView: View {
     @State private var vaporServer = VaporServer()
     @State private var serverPort = "8080"
     @State private var currentIP = "Not detected"
-    
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 24) {
@@ -105,32 +105,31 @@ struct ServerContentView: View {
             .padding(.horizontal, 24)
             .padding(.vertical, 16)
         }
+        .onAppear {
+            vaporServer.setAppState(appState)
+        }
     }
-    
+
     @MainActor
     private func toggleServer() {
         Task {
             if vaporServer.isRunning {
                 // Stop server
-                appState.addDebugMessage("Stopping web server", type: .info)
                 await vaporServer.stop()
-                appState.addDebugMessage("Web server stopped", type: .info)
             } else {
                 // Start server
                 guard let port = Int(serverPort) else {
-                    appState.addDebugMessage("Invalid port number", type: .error)
+                    appState.addDebugMessage("Invalid port number: \(serverPort)", type: .error)
                     return
                 }
-                
-                appState.addDebugMessage("Starting web server on port \(port)", type: .info)
+
                 detectCurrentIP()
-                
+
                 do {
                     try await vaporServer.start(on: port)
-                    appState.addDebugMessage("Web server started successfully", type: .success)
-                    appState.addDebugMessage("Visit http://\(currentIP):\(port) in your browser", type: .info)
+                    appState.addDebugMessage("Server accessible at http://\(currentIP):\(port)", type: .info)
                 } catch {
-                    appState.addDebugMessage("Failed to start server: \(error.localizedDescription)", type: .error)
+                    // Error already logged by VaporServer
                 }
             }
         }
