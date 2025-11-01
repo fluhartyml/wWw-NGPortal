@@ -10,11 +10,12 @@ import Foundation
 import Vapor
 
 @MainActor
+@Observable
 class VaporServer {
     private var app: Application?
     private var serverTask: Task<Void, Error>?
-    private(set) var isRunning = false
-    private(set) var port: Int = 8080
+    var isRunning = false
+    var port: Int = 8080
     
     func start(on port: Int) async throws {
         guard !isRunning else { return }

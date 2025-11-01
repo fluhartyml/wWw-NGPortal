@@ -62,9 +62,10 @@ struct ServerContentView: View {
                                 Text("URL:")
                                     .fontWeight(.medium)
                                 Spacer()
-                                Text("http://\(currentIP):\(serverPort)")
-                                    .foregroundStyle(.blue)
-                                    .textSelection(.enabled)
+                                if let url = URL(string: "http://\(currentIP):\(serverPort)") {
+                                    Link("http://\(currentIP):\(serverPort)", destination: url)
+                                        .foregroundStyle(.blue)
+                                }
                             }
                         }
                     }

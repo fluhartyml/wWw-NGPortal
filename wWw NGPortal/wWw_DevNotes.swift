@@ -44,6 +44,7 @@ Rules & Guidance for ChatGPT/Claude (Persistent Memory)
   * This creates a calm, methodical, stress-free workflow
 - USER PREFERS XCODE-ONLY WORKFLOW: No terminal commands ever.
 - FOCUS ON BUGS/ERRORS ONLY: Enhancements and new features go in notes only, not implemented unless fixing a bug.
+- AFTER SUCCESSFUL BUILD: Claude must remind user to push to GitHub via Xcode Source Control.
 
 - Commit message style: short, imperative, informative (e.g., "Fix entry save bug").
 - When asked to "summarize developer notes", summarize ONLY content from this file; do not invent or reference external logs.
@@ -66,6 +67,17 @@ GitHub & Repository Policy
 ====================================================
 Project Status & Chat Summary
 ====================================================
+- [2025 NOV 01 0922] (Claude) Adding clickable URL link to server status:
+  - Task: Make URL in ServerContentView clickable to open in default browser
+  - Will use Link view or Button with NSWorkspace.shared.open()
+- [2025 NOV 01 0910] (Claude) Morning development session - Swift 6 upgrade and bug fixes:
+  - Upgraded project from Swift 5.0 to Swift 6.0 in project.pbxproj (all targets: main, tests, UI tests)
+  - Fixed server status UI sync bug: Added @Observable macro to VaporServer class
+  - Removed private(set) from isRunning and port properties to allow SwiftUI observation
+  - Bug: UI showed "Stopped" even when server was running - now status updates correctly
+  - Confirmed app builds and runs with Swift 6.0, no new compilation errors
+  - Project using modern Swift 6 concurrency features: @MainActor isolation, approachable concurrency
+  - Build successful: Status now correctly shows "Running" (green) / "Stopped" (gray) and toggles properly
 - [2025 OCT 31 2225] (Claude) Session summary - First Claude Code CLI integration with wWw NGPortal project:
   - Established workflow: Screenshots folder for app screenshots, Drop folder for file delivery to user
   - Developer notes file renamed to wWw_DevNotes.swift (accessible via "read www devnotes")
