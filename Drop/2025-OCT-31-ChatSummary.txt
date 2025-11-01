@@ -1,0 +1,34 @@
+Claude Code Terminal Session Summary
+2025 OCT 31
+
+Session Overview:
+Initial introduction to Claude Code CLI workflow and project navigation.
+
+Key Activities:
+1. User verified account: michaelfluharty
+2. Navigated to ~/Developer/NightGard/wWw NGPortal project
+3. Reviewed project structure (Backbone, DDNS, Debug, Server, SplitView, Vapor, Views folders)
+4. Read wWw NGPortal_DeveloperNotes.swift - established as persistent memory system
+5. Located Screenshots folder for future screenshot sharing
+6. Located Drop folder - designated as file transfer location from Claude to user
+
+Workflow Established:
+- Screenshots: User saves to Screenshots folder, tells Claude filename to read
+- File delivery: Claude writes files to Drop folder for user to manually add to Xcode
+- Developer notes: Claude maintains session logs in wWw NGPortal_DeveloperNotes.swift
+- Communication style: TL;DR concise (1-2 paragraphs)
+- Xcode workflow: Screenshot methodology, AI does all coding, user does minimal Xcode actions only
+
+Key Policies from Developer Notes:
+- Xcode-only workflow (no terminal commands for user)
+- Focus on bugs/errors only; enhancements logged but not implemented
+- GitHub sync-only (no CI/CD, no automation)
+- Use Edit tool to replace file content (never create duplicates)
+- Timestamp format: [2025 OCT 31 HHMM] (Claude/MLF)
+- Sign entries: Claude uses (Claude), user signs as (MLF)
+
+Next Steps:
+Ready for development tasks on wWw NGPortal project.
+
+Current Working Directory:
+/Users/michaelfluharty/Developer/NightGard/wWw NGPortal
