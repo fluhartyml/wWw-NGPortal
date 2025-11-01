@@ -67,8 +67,8 @@ struct DebugTickerView: View {
     
     private func startScrolling(viewWidth: CGFloat) {
         guard contentWidth > 0 else { return }
-        
-        withAnimation(.linear(duration: Double(contentWidth / 50)).repeatForever(autoreverses: false)) {
+
+        withAnimation(.linear(duration: Double(contentWidth / 150)).repeatForever(autoreverses: false)) {
             scrollOffset = -contentWidth - viewWidth
         }
     }
