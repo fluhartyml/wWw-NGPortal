@@ -34,6 +34,7 @@ class AppState {
 enum AppFeature {
     case ddns
     case webServer
+    case configuration
 }
 
 struct DebugMessage: Identifiable {

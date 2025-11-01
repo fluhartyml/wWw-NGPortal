@@ -30,13 +30,21 @@ struct NavigationPanel: View {
                 ) {
                     appState.selectedFeature = .webServer
                 }
-                
+
                 NavigationButton(
                     title: "DDNS",
                     icon: "network",
                     isSelected: appState.selectedFeature == .ddns
                 ) {
                     appState.selectedFeature = .ddns
+                }
+
+                NavigationButton(
+                    title: "Configuration",
+                    icon: "gearshape.2",
+                    isSelected: appState.selectedFeature == .configuration
+                ) {
+                    appState.selectedFeature = .configuration
                 }
             }
             .padding(.vertical, 8)
@@ -50,6 +58,8 @@ struct NavigationPanel: View {
                     ServerControlsPanel()
                 case .ddns:
                     DDNSControlsPanel()
+                case .configuration:
+                    ConfigurationControlsPanel()
                 }
             }
             
@@ -106,8 +116,20 @@ struct DDNSControlsPanel: View {
             Text("DDNS Controls")
                 .font(.headline)
                 .padding()
-            
+
             // TODO: Add DDNS-specific controls
+        }
+    }
+}
+
+struct ConfigurationControlsPanel: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Text("Configuration")
+                .font(.headline)
+                .padding()
+
+            // TODO: Add configuration controls
         }
     }
 }

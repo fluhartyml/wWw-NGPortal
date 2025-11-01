@@ -18,6 +18,8 @@ struct ContentPanel: View {
                 ServerContentView()
             case .ddns:
                 DDNSContentView()
+            case .configuration:
+                ConfigurationContentView()
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)
