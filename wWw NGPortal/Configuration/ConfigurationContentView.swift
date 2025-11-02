@@ -11,6 +11,7 @@ import AppKit
 
 struct ConfigurationContentView: View {
     @Environment(AppState.self) private var appState
+    @State private var selectedAppearanceMode: AppearanceMode = .dark
     @State private var fileStructure = NightgardFileStructure.shared
     @State private var logExpirationDays = 30
     @State private var showingFolderPicker = false
@@ -82,6 +83,35 @@ struct ConfigurationContentView: View {
                                 }
                             }
                         }
+                    }
+                    .padding(.vertical, 8)
+                }
+
+                // Appearance Settings
+                GroupBox("Appearance") {
+                    VStack(alignment: .leading, spacing: 12) {
+                        HStack {
+                            Text("Theme:")
+                                .fontWeight(.medium)
+
+                            Picker("", selection: $selectedAppearanceMode) {
+                                ForEach(AppearanceMode.allCases, id: \.self) { mode in
+                                    Text(mode.rawValue).tag(mode)
+                                }
+                            }
+                            .pickerStyle(.segmented)
+                            .frame(width: 200)
+                            .onChange(of: selectedAppearanceMode) { _, newValue in
+                                appState.appearanceMode = newValue
+                                appState.addDebugMessage("Appearance mode changed to \(newValue.rawValue)", type: .info)
+                            }
+
+                            Spacer()
+                        }
+
+                        Text("Choose between Light or Dark mode for the application appearance.")
+                            .font(.caption)
+                            .foregroundStyle(.secondary)
                     }
                     .padding(.vertical, 8)
                 }
@@ -184,6 +214,7 @@ struct ConfigurationContentView: View {
         if let config = fileStructure.getCurrentConfig() {
             logExpirationDays = config.logExpirationDays
         }
+        selectedAppearanceMode = appState.appearanceMode
     }
 
     private func initializeDefault() {

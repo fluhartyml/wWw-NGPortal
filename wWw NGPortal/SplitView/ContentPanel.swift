@@ -12,14 +12,30 @@ struct ContentPanel: View {
     @Environment(AppState.self) private var appState
     
     var body: some View {
-        Group {
-            switch appState.selectedFeature {
-            case .webServer:
-                ServerContentView()
-            case .ddns:
-                DDNSContentView()
-            case .configuration:
-                ConfigurationContentView()
+        ZStack {
+            // Subtle watermark background
+            GeometryReader { geometry in
+                Image("AppIconImage")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: min(geometry.size.width, geometry.size.height) * 0.4)
+                    .opacity(0.03)
+                    .position(
+                        x: geometry.size.width * 0.85,
+                        y: geometry.size.height * 0.85
+                    )
+            }
+
+            // Content
+            Group {
+                switch appState.selectedFeature {
+                case .webServer:
+                    ServerContentView()
+                case .ddns:
+                    DDNSContentView()
+                case .configuration:
+                    ConfigurationContentView()
+                }
             }
         }
         .frame(maxWidth: .infinity, maxHeight: .infinity)

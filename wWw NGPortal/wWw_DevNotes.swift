@@ -65,6 +65,25 @@ GitHub & Repository Policy
 ====================================================
 Project Status & Chat Summary
 ====================================================
+- [2025 NOV 01 2121] (MF) MILESTONE - Local web server fully functional:
+  - Server status sync fixed - UI correctly shows Running/Stopped state
+  - Static file serving from Nightgard.root/public working
+  - Root path (/) serves index.html correctly
+  - Clickable URL link appears when server running
+  - "Open Public Folder" button added to server panel
+  - Light/dark adaptive icon branding throughout app
+  - Appearance mode toggle (Light/Dark) in Configuration
+  - Swift 6 compliance: Fixed deprecated String(cString:) and streamFile calls
+  - VaporServer moved to AppState for shared instance across views
+  - Debug ticker shows comprehensive server lifecycle messages
+  - MVP achieved: Fully functional local intranet web server
+- [2025 NOV 01 1845] (MF) CRITICAL PROCEDURAL RULE - Screenshot auto-detection and compression:
+  - When user mentions screenshot, ALWAYS auto-detect newest screenshot in Screenshots folder
+  - Command: ls -lt Screenshots/*.png | grep -v "small" | head -1
+  - Then compress: sips -Z 1920 "Screenshots/filename.png" --out "Screenshots/filename-small.png"
+  - Then read the -small.png version to prevent Claude lockups
+  - Reason: Retina screenshots are 5-10MB; Read tool loading full image causes timeouts/crashes
+  - User does NOT need to provide filename; Claude finds and processes newest uncompressed screenshot automatically
 - [2025 NOV 01 1200] (Claude) COMPLETED - Developer notes updated for Claude Code CLI workflow:
   - Clarified AI does all coding/file editing via terminal/CLI commands; NEW files go to Drop folder only (prevents Xcode duplicates)
   - Added explicit policy: ****Human does not CODE****
@@ -200,5 +219,4 @@ Developer Notes Log
 - [2025-09-26 13:55] (Claude) Created developer notes file and established persistent memory system for project.
 
 // Add new notes above this line. Keep newest entries at the top for quick scanning.
-*/
-
+ */*/

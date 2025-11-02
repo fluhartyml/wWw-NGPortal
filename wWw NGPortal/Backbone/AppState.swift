@@ -15,6 +15,8 @@ class AppState {
     var selectedFeature: AppFeature = .webServer
     var isDebugEnabled: Bool = true  // Start with debug ticker open
     var debugMessages: [DebugMessage] = []
+    var appearanceMode: AppearanceMode = .dark
+    var vaporServer = VaporServer()
     
     func addDebugMessage(_ message: String, type: DebugMessageType = .info) {
         let debugMessage = DebugMessage(text: message, type: type)
@@ -49,4 +51,9 @@ enum DebugMessageType {
     case warning
     case error
     case success
+}
+
+enum AppearanceMode: String, CaseIterable {
+    case light = "Light"
+    case dark = "Dark"
 }

@@ -21,6 +21,37 @@ struct NavigationPanel: View {
     
     var body: some View {
         VStack(spacing: 0) {
+            // Branded Header
+            VStack(spacing: 4) {
+                Image("AppIconImage")
+                    .resizable()
+                    .aspectRatio(contentMode: .fit)
+                    .frame(width: 64, height: 64)
+                    .shadow(color: .green.opacity(0.3), radius: 8, x: 0, y: 2)
+
+                Text("wWw NGPortal")
+                    .font(.system(size: 16, weight: .semibold))
+                    .foregroundColor(.primary)
+
+                Text("NightGard Server")
+                    .font(.system(size: 11, weight: .regular))
+                    .foregroundColor(.secondary)
+            }
+            .padding(.vertical, 20)
+            .frame(maxWidth: .infinity)
+            .background(
+                LinearGradient(
+                    gradient: Gradient(colors: [
+                        Color.green.opacity(0.05),
+                        Color.clear
+                    ]),
+                    startPoint: .top,
+                    endPoint: .bottom
+                )
+            )
+
+            Divider()
+
             // Feature Selection Buttons
             VStack(spacing: 1) {
                 NavigationButton(

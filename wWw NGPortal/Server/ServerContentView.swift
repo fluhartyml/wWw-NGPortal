@@ -10,7 +10,6 @@ import SwiftUI
 
 struct ServerContentView: View {
     @Environment(AppState.self) private var appState
-    @State private var vaporServer = VaporServer()
     @State private var serverPort = "8080"
     @State private var currentIP = "Not detected"
 
@@ -37,8 +36,8 @@ struct ServerContentView: View {
                             Text("Status:")
                                 .fontWeight(.medium)
                             Spacer()
-                            Text(vaporServer.isRunning ? "Running" : "Stopped")
-                                .foregroundStyle(vaporServer.isRunning ? .green : .secondary)
+                            Text(appState.vaporServer.isRunning ? "Running" : "Stopped")
+                                .foregroundStyle(appState.vaporServer.isRunning ? .green : .secondary)
                         }
                         
                         HStack {
@@ -57,7 +56,7 @@ struct ServerContentView: View {
                                 .foregroundStyle(.secondary)
                         }
                         
-                        if vaporServer.isRunning {
+                        if appState.vaporServer.isRunning {
                             HStack {
                                 Text("URL:")
                                     .fontWeight(.medium)
@@ -67,6 +66,19 @@ struct ServerContentView: View {
                                         .foregroundStyle(.blue)
                                 }
                             }
+                        }
+
+                        Divider()
+
+                        HStack(spacing: 12) {
+                            if let publicFolder = NightgardFileStructure.shared.nightgardRoot?.appendingPathComponent("public") {
+                                Button("Open Public Folder") {
+                                    NSWorkspace.shared.open(publicFolder)
+                                }
+                                .buttonStyle(.bordered)
+                            }
+
+                            Spacer()
                         }
                     }
                     .padding(.vertical, 8)
@@ -79,7 +91,7 @@ struct ServerContentView: View {
                             TextField("Port", text: $serverPort)
                                 .textFieldStyle(.roundedBorder)
                                 .frame(width: 100)
-                                .disabled(vaporServer.isRunning)
+                                .disabled(appState.vaporServer.isRunning)
                             
                             Text("Server Port")
                                 .foregroundStyle(.secondary)
@@ -89,8 +101,8 @@ struct ServerContentView: View {
                         
                         Button(action: toggleServer) {
                             HStack {
-                                Image(systemName: vaporServer.isRunning ? "stop.fill" : "play.fill")
-                                Text(vaporServer.isRunning ? "Stop Server" : "Start Server")
+                                Image(systemName: appState.vaporServer.isRunning ? "stop.fill" : "play.fill")
+                                Text(appState.vaporServer.isRunning ? "Stop Server" : "Start Server")
                             }
                             .frame(maxWidth: .infinity)
                         }
@@ -106,7 +118,9 @@ struct ServerContentView: View {
             .padding(.vertical, 16)
         }
         .onAppear {
-            vaporServer.setAppState(appState)
+            if appState.vaporServer.appState == nil {
+                appState.vaporServer.setAppState(appState)
+            }
             detectCurrentIP()
         }
     }
@@ -114,9 +128,9 @@ struct ServerContentView: View {
     @MainActor
     private func toggleServer() {
         Task {
-            if vaporServer.isRunning {
+            if appState.vaporServer.isRunning {
                 // Stop server
-                await vaporServer.stop()
+                await appState.vaporServer.stop()
             } else {
                 // Start server
                 guard let port = Int(serverPort) else {
@@ -127,7 +141,7 @@ struct ServerContentView: View {
                 detectCurrentIP()
 
                 do {
-                    try await vaporServer.start(on: port)
+                    try await appState.vaporServer.start(on: port)
                     appState.addDebugMessage("Server accessible at http://\(currentIP):\(port)", type: .info)
                 } catch {
                     // Error already logged by VaporServer
@@ -150,7 +164,8 @@ struct ServerContentView: View {
                 let addrFamily = interface?.ifa_addr.pointee.sa_family
 
                 if addrFamily == UInt8(AF_INET) {
-                    let name = String(cString: (interface?.ifa_name)!)
+                    guard let ifaName = interface?.ifa_name else { continue }
+                    let name = String(validatingCString: ifaName) ?? ""
 
                     // Check for en0 (Ethernet) or en1 (Wi-Fi)
                     if name == "en0" || name == "en1" {
@@ -158,7 +173,7 @@ struct ServerContentView: View {
                         getnameinfo(interface?.ifa_addr, socklen_t((interface?.ifa_addr.pointee.sa_len)!),
                                   &hostname, socklen_t(hostname.count),
                                   nil, socklen_t(0), NI_NUMERICHOST)
-                        address = String(cString: hostname)
+                        address = String(validatingCString: hostname) ?? "Not detected"
                         break
                     }
                 }

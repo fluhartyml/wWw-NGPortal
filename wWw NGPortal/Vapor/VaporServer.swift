@@ -16,7 +16,7 @@ class VaporServer {
     private var serverTask: Task<Void, Error>?
     var isRunning = false
     var port: Int = 8080
-    private weak var appState: AppState?
+    weak var appState: AppState?
 
     func setAppState(_ appState: AppState) {
         self.appState = appState
@@ -40,6 +40,14 @@ class VaporServer {
         appState?.addDebugMessage("Configured server: 0.0.0.0:\(port)", type: .info)
 
         self.app = app
+
+        // Configure static file serving from Nightgard public folder
+        if let publicPath = NightgardFileStructure.shared.nightgardRoot?.appendingPathComponent("public").path {
+            app.middleware.use(FileMiddleware(publicDirectory: publicPath))
+            appState?.addDebugMessage("Serving static files from: \(publicPath)", type: .info)
+        } else {
+            appState?.addDebugMessage("Warning: Nightgard public folder not found, using default routes", type: .warning)
+        }
 
         // Configure routes
         configureRoutes(app)
@@ -90,50 +98,14 @@ class VaporServer {
     }
     
     private func configureRoutes(_ app: Application) {
-        // Root route
-        app.get { req async -> Response in
-            let html = """
-            <!DOCTYPE html>
-            <html>
-            <head>
-                <title>wWw NGPortal</title>
-                <style>
-                    body {
-                        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Helvetica, Arial, sans-serif;
-                        max-width: 800px;
-                        margin: 50px auto;
-                        padding: 20px;
-                        background: #f5f5f7;
-                    }
-                    h1 { color: #1d1d1f; }
-                    .info { background: white; padding: 20px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-                    a { color: #0071e3; text-decoration: none; }
-                    a:hover { text-decoration: underline; }
-                </style>
-            </head>
-            <body>
-                <h1>🚀 wWw NGPortal Server</h1>
-                <div class="info">
-                    <p>Server is running successfully!</p>
-                    <p>Powered by <a href="https://vapor.codes" target="_blank">Vapor</a></p>
-                    <p><strong>Available Routes:</strong></p>
-                    <ul>
-                        <li><a href="/">/ (Home)</a></li>
-                        <li><a href="/api/status">/api/status (API Status)</a></li>
-                        <li><a href="/api/info">/api/info (Server Info)</a></li>
-                    </ul>
-                </div>
-            </body>
-            </html>
-            """
-            
-            return Response(
-                status: .ok,
-                headers: ["Content-Type": "text/html; charset=utf-8"],
-                body: .init(string: html)
-            )
+        // Serve index.html for root path
+        app.get { req async throws -> Response in
+            guard let publicPath = await NightgardFileStructure.shared.nightgardRoot?.appendingPathComponent("public/index.html").path else {
+                throw Abort(.notFound)
+            }
+            return try await req.fileio.asyncStreamFile(at: publicPath)
         }
-        
+
         // API Status route
         app.get("api", "status") { req async in
             return [

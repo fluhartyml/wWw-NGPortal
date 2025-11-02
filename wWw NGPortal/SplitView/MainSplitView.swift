@@ -23,8 +23,18 @@ struct MainSplitView: View {
         VStack(spacing: 0) {
             // Top Toolbar
             HStack {
+                // App Icon Menu Button
+                Button(action: showAbout) {
+                    Image("AppIconImage")
+                        .resizable()
+                        .aspectRatio(contentMode: .fit)
+                        .frame(width: 28, height: 28)
+                }
+                .buttonStyle(.borderless)
+                .help("About wWw NGPortal")
+
                 Spacer()
-                
+
                 Button(action: refreshAll) {
                     Image(systemName: "arrow.clockwise")
                         .imageScale(.large)
@@ -60,11 +70,26 @@ struct MainSplitView: View {
             }
         }
         .environment(appState)
+        .preferredColorScheme(colorScheme(for: appState.appearanceMode))
+    }
+
+    private func colorScheme(for mode: AppearanceMode) -> ColorScheme {
+        switch mode {
+        case .light:
+            return .light
+        case .dark:
+            return .dark
+        }
     }
     
     private func refreshAll() {
         appState.addDebugMessage("Refresh all triggered", type: .info)
         // TODO: Implement refresh logic
+    }
+
+    private func showAbout() {
+        appState.addDebugMessage("About wWw NGPortal - NightGard Server v1.0", type: .info)
+        // TODO: Show about panel or app info
     }
 }
 

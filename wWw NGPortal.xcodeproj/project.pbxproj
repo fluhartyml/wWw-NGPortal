@@ -39,6 +39,7 @@
 			membershipExceptions = (
 				"Drop/2025-NOV-01-Session-Summary-CLI-Workflow-Update.md",
 				"Drop/2025-OCT-31-ChatSummary.txt",
+				Drop/Dark_NightGard_AppIcon.icns,
 			);
 			target = C091C32C2EB51B2200B5147A /* wWw NGPortal */;
 		};
